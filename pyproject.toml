@@ -1,0 +1,86 @@
+[project]
+name = "streamwright"
+version = "0.1.0"
+description = "Streaming-first orchestration for multi-LLM pipelines"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [
+    { name = "Arjun Karthik", email = "akart07@gmail.com" },
+    { name = "Prakhar Dagur", email = "prakharevan@gmail.com" },
+]
+maintainers = [
+    { name = "Arjun Karthik", email = "akart07@gmail.com" },
+    { name = "Prakhar Dagur", email = "prakharevan@gmail.com" },
+]
+keywords = [
+    "llm",
+    "orchestration",
+    "streaming",
+    "async",
+    "anthropic",
+    "openai",
+    "moonshot",
+    "kimi",
+    "dag",
+    "pipeline",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "anyio",
+    "httpx",
+    "pydantic>=2",
+    "typing-extensions",
+]
+
+[project.urls]
+Homepage = "https://github.com/arjunkarth1k/streamwright-python"
+Repository = "https://github.com/arjunkarth1k/streamwright-python"
+Issues = "https://github.com/arjunkarth1k/streamwright-python/issues"
+Changelog = "https://github.com/arjunkarth1k/streamwright-python/releases"
+
+[dependency-groups]
+dev = [
+    "mypy",
+    "pytest",
+    "pytest-asyncio",
+    "python-dotenv>=1.2.2",
+    "ruff",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["streamwright*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
