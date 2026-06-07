@@ -1,0 +1,14 @@
+# Normalize all text files to LF in the repo and on checkout everywhere
+# (eol=lf forces LF on checkout on every platform, avoiding CRLF warnings).
+* text=auto eol=lf
+
+# Treat lockfile and config as text with LF (avoids the CRLF warning)
+uv.lock text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+
+# Binary types — leave alone
+*.png binary
+*.jpg binary
+*.ico binary
