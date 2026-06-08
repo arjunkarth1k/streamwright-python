@@ -1,0 +1,38 @@
+# Integration tests make real, paid API calls to Anthropic, OpenAI,
+# and Moonshot. Triggered manually (workflow_dispatch) OR automatically
+# on release tags (v*.*.*), never on normal push/PR. Each full run is
+# under $0.10 at current pricing.
+#
+# Requires repo secrets: ANTHROPIC_API_KEY, OPENAI_API_KEY,
+# MOONSHOT_API_KEY. Tests with a missing key skip cleanly rather than
+# fail, so partial-key configurations work for debugging.
+name: Integration tests
+
+on:
+  workflow_dispatch: {}
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Run integration tests
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
+          STREAMWRIGHT_RUN_INTEGRATION: "1"
+        run: uv run pytest tests/integration/ -v
