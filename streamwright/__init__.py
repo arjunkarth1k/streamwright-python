@@ -1,7 +1,49 @@
-"""streamwright — streaming-first orchestration for multi-LLM pipelines.
+"""Public package interface for streamwright."""
 
-The public interface is populated as the package modules land. See the
-migration plan for the order in which components are added.
-"""
+from .pipeline import Pipeline, merge, step
+from .providers import (
+    AnthropicProvider,
+    CapabilityError,
+    CompletionResult,
+    Done,
+    Message,
+    MoonshotProvider,
+    OpenAIProvider,
+    Provider,
+    ReasoningDelta,
+    StreamEvent,
+    TextDelta,
+    Tool,
+    ToolCallDelta,
+    UnknownModelError,
+    Usage,
+    UsageEvent,
+    aclose,
+    get_capabilities,
+    get_provider,
+)
 
-__version__ = "0.1.0"
+__all__ = [
+    "AnthropicProvider",
+    "CapabilityError",
+    "CompletionResult",
+    "Done",
+    "Message",
+    "MoonshotProvider",
+    "OpenAIProvider",
+    "Pipeline",
+    "Provider",
+    "ReasoningDelta",
+    "StreamEvent",
+    "TextDelta",
+    "Tool",
+    "ToolCallDelta",
+    "UnknownModelError",
+    "Usage",
+    "UsageEvent",
+    "aclose",
+    "get_capabilities",
+    "get_provider",
+    "merge",
+    "step",
+]
