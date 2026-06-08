@@ -24,7 +24,10 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: uv sync --dev
+        # --no-editable installs streamwright as a real package dir (not a
+        # PEP-660 editable finder shim), so mypy can read its py.typed types
+        # for `from streamwright import ...` resolution on Linux.
+        run: uv sync --dev --no-editable
 
       - name: Lint
         run: uv run ruff check .
