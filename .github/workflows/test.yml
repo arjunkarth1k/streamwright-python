@@ -24,16 +24,21 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        # --no-editable installs streamwright as a real package dir (not a
-        # PEP-660 editable finder shim), so mypy can read its py.typed types
-        # for `from streamwright import ...` resolution on Linux.
-        run: uv sync --dev --no-editable
+        # Install dev deps but NOT the project itself. Otherwise `streamwright`
+        # exists both as the ./streamwright source dir (passed to mypy) and as
+        # an installed copy, and mypy treats the duplicate as a namespace
+        # package — ignoring __init__.py, so `from streamwright import X` fails
+        # on Linux. With deps-only, ./streamwright is the single source; pytest
+        # still imports it from the repo root.
+        run: uv sync --dev --no-install-project
 
+      # --no-sync on each step: `uv run` re-syncs (reinstalls the project) by
+      # default, which would re-introduce the mypy duplicate-package problem.
       - name: Lint
-        run: uv run ruff check .
+        run: uv run --no-sync ruff check .
 
       - name: Type-check
-        run: uv run mypy streamwright tests
+        run: uv run --no-sync mypy streamwright tests
 
       - name: Test
-        run: uv run pytest
+        run: uv run --no-sync pytest
