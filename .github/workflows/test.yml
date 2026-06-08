@@ -20,39 +20,15 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
-        with:
-          python-version: "3.12"
 
       - name: Install dependencies
-        # Install dev deps but NOT the project itself. Otherwise `streamwright`
-        # exists both as the ./streamwright source dir (passed to mypy) and as
-        # an installed copy, and mypy treats the duplicate as a namespace
-        # package — ignoring __init__.py, so `from streamwright import X` fails
-        # on Linux. With deps-only, ./streamwright is the single source; pytest
-        # still imports it from the repo root.
-        run: uv sync --dev --no-install-project
+        run: uv sync --dev
 
-      # --no-sync on each step: `uv run` re-syncs (reinstalls the project) by
-      # default, which would re-introduce the mypy duplicate-package problem.
       - name: Lint
-        run: uv run --no-sync ruff check .
-
-      - name: Debug env
-        run: |
-          echo "PWD: $(pwd)"
-          echo "--- is streamwright installed? ---"
-          uv pip list 2>/dev/null | grep -i streamwright || echo "streamwright NOT installed (good)"
-          echo "--- python import resolution ---"
-          uv run --no-sync python -c "import streamwright; print('FILE:', streamwright.__file__); print('HAS_Pipeline:', hasattr(streamwright,'Pipeline'))" 2>&1 || echo "python import FAILED"
-          echo "--- mypy version + config ---"
-          uv run --no-sync mypy --version
-          echo "--- streamwright/__init__.py head ---"
-          head -5 streamwright/__init__.py
-          echo "--- .pth files in venv site-packages ---"
-          find .venv -name "*.pth" -maxdepth 4 2>/dev/null | head; find .venv -path "*site-packages*streamwright*" 2>/dev/null | head
+        run: uv run ruff check .
 
       - name: Type-check
-        run: uv run --no-sync mypy streamwright tests
+        run: uv run mypy streamwright tests
 
       - name: Test
-        run: uv run --no-sync pytest
+        run: uv run pytest
